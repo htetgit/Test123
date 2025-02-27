@@ -1,4 +1,4 @@
-name: Build
+rname: Build
 
 on:
   push:
@@ -26,8 +26,8 @@ jobs:
           # CORRECT PARAMETER NAME (camelCase)
           scannerVersion: 5.0.1.3006
         env:
-          SONAR_TOKEN: ${{ SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Verify Connectivity
         run: |
