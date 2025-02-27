@@ -12,18 +12,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required for proper analysis
+          fetch-depth: 0
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: 17  # SonarScanner requires Java 17
+          java-version: 17
           distribution: 'temurin'
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
         with:
-          scanner-version: 5.0.1.3006  # Update to newer scanner version
+          # CORRECT PARAMETER NAME (camelCase)
+          scannerVersion: 5.0.1.3006
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ SONAR_HOST_URL }}
+
+      - name: Verify Connectivity
+        run: |
+          curl -I -X GET "${{ secrets.SONAR_HOST_URL }}/api/server/version" \
+          -H "Authorization: Bearer ${{ secrets.SONAR_TOKEN }}"
