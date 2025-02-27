@@ -21,10 +21,10 @@ jobs:
           distribution: 'temurin'
 
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: SonarSource/sonarqube-scan-action@master
         with:
-          
-           scannerVersion: latest
+          # CORRECT PARAMETER NAME (camelCase)
+          scannerVersion: 5.0.1.3006
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
