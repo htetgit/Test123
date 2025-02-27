@@ -23,13 +23,8 @@ jobs:
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
         with:
-          # CORRECT PARAMETER NAME (camelCase)
-          scannerVersion: 5.0.1.3006
+          # Use explicit scanner version (new parameter format)
+          scannerVersion: 5.0.1.3006  # Verified working version
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
-      - name: Verify Connectivity
-        run: |
-          curl -I -X GET "${{ secrets.SONAR_HOST_URL }}/api/server/version" \
-          -H "Authorization: Bearer ${{ secrets.SONAR_TOKEN }}"
