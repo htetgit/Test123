@@ -1,4 +1,4 @@
-name: Build
+name: SonarQube Analysis
 
 on:
   push:
@@ -6,25 +6,28 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build and analyze
+  sonarqube:
+    name: Analyze with SonarQube
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: 17
           distribution: 'temurin'
+          java-version: 17
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@master
-        with:
-          # Use explicit scanner version (new parameter format)
-          scannerVersion: 5.0.1.3006  # Verified working version
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - name: Verify SonarQube Connectivity
+        run: |
+          curl -I "${{ secrets.SONAR_HOST_URL }}/api/server/version"
+
+      - name: Run SonarQube Scanner
+        run: |
+          docker run --rm \
+            -e SONAR_HOST_URL="${{ secrets.SONAR_HOST_URL }}" \
+            -e SONAR_LOGIN="${{ secrets.SONAR_TOKEN }}" \
+            -v "$(pwd):/usr/src" \
+            sonarsource/sonar-scanner-cli:5.0.1.3006
